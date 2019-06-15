@@ -1,0 +1,11 @@
+$sideBarWidth: 210px;
+
+$menuTextColor:#bfcbd9;
+
+$menuBgColor:#304156;
+
+:export {
+  menuBgColor: $menuBgColor;
+  menuTextColor: $menuTextColor;
+}
+
