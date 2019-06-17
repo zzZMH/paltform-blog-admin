@@ -25,43 +25,45 @@ const constRouters = [{
   hidden: true
 }, {
   path: '/',
-  name: '首页',
   component: Layout,
   redirect: '/home',
-  meta: { icon: 'el-icon-s-home', roles: ['user', 'visitor'] },
   children: [{
     path: 'home',
     name: '首页',
     component: () => import('../views/Home.vue'),
-    meta: { icon: 'el-icon-s-home', roles: ['user', 'visitor'] }
+    meta: { title: '首页', icon: 'el-icon-s-home', roles: ['user', 'visitor'] }
   }]
 }, {
   path: '/about',
-  name: '关于',
   component: Layout,
   redirect: '/about/introduce',
-  meta: { icon: 'el-icon-paperclip', roles: ['user'] },
+  name: '关于',
+  meta: { title: '关于', icon: 'el-icon-s-comment' },
   children: [{
     path: 'introduce',
     name: '简介',
     component: () => import('../views/About.vue'),
-    meta: { icon: 'el-icon-s-comment', roles: ['user'] }
+    meta: { title: '简介', icon: 'el-icon-s-comment', roles: ['user'] }
   }, {
     path: 'login',
     name: '登录',
     component: () => import('../views/Login.vue'),
-    meta: { icon: 'el-icon-s-custom' }
+    meta: { title: '登录', icon: 'el-icon-s-custom' }
   }]
 }, {
-  path: 'a',
-  name: '文章管理',
-  meta: { icon: 'el-icon-s-custom', roles: ['user'] },
-  children: []
+  path: '/a',
+  children: [{
+    path: 'a',
+    name: '文章管理',
+    meta: { title: '文章管理', icon: 'el-icon-s-home', roles: ['user', 'visitor'] }
+  }]
 }, {
-  path: 'b',
-  name: '审核管理',
-  meta: { icon: 'el-icon-s-custom' },
-  children: []
+  path: '/b',
+  children: [{
+    path: 'b',
+    name: '审核管理',
+    meta: { title: '审核管理', icon: 'el-icon-s-home', roles: ['user', 'visitor'] }
+  }]
 }]
 
 const router = new Router({

@@ -1,26 +1,27 @@
 <template>
-  <div v-if="!item.hidden && (userRole === 'admin' || item.meta && item.meta.roles && item.meta.roles.indexOf(userRole) >= 0)" class="menu-wrapper">
+  <div v-if="!item.hidden" class="menu-wrapper">
     <template v-if="hasOnlyOneChild(item, item.children)">
       <router-link :to="resolvePath(onlyOneChild.path)">
         <el-menu-item :index="resolvePath(onlyOneChild.path)">
-          <i :class="onlyOneChild.meta.icon"></i>
-          <span slot="title">{{ onlyOneChild.name }}</span>
+          <i :class="onlyOneChild.meta && onlyOneChild.meta.icon"></i>
+          <span slot="title">{{ onlyOneChild.meta && onlyOneChild.meta.title }}</span>
         </el-menu-item>
       </router-link>
     </template>
 
     <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body>
       <template slot="title">
-        <i :class="item.meta.icon"></i>
-        <span slot="title">{{ item.name }}</span>
+        <i :class="item.meta && item.meta.icon"></i>
+        <span slot="title">{{ item.meta && item.meta.title }}</span>
       </template>
-      <SideMenu class="nest-menu" v-for="child in item.children" :key="child.path" :item="child" :basePath="resolvePath(child.path)" :userRole="userRole"/>
+      <SideMenu class="nest-menu" v-for="child in item.children" :key="child.path" :item="child" :basePath="resolvePath(child.path)"/>
     </el-submenu>
   </div>
 </template>
 
 <script>
 import path from 'path'
+
 export default {
   name: 'SideMenu',
   props: {
@@ -32,11 +33,6 @@ export default {
       type: String,
       required: true,
       default: ''
-    },
-    userRole: {
-      type: String,
-      required: true,
-      default: 'visitor'
     }
   },
   data () {

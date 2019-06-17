@@ -1,12 +1,12 @@
 import Cookies from 'js-cookie'
 
 const state = {
-  userRole: 'visitor'
+  userRole: 'admin'
 }
 
 const mutations = {
   GET_USERROLE (state) {
-    state.userRole = Cookies.get('userRole') ? Cookies.get('userRole') : 'visitor'
+    state.userRole = Cookies.get('userRole') ? Cookies.get('userRole') : 'admin'
   }
 }
 

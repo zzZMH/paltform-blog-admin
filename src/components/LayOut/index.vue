@@ -6,10 +6,10 @@
     <div class="sidebar">
       <div class="logo-title">
         <transition name="logo-title-chg">
-          <router-link v-if="sidebarState" key="open" to="/about">
+          <router-link v-if="sidebarState" key="open" to="/">
             <h3 class="title">{{title}}</h3>
           </router-link>
-          <router-link v-else key="close" to="/about">
+          <router-link v-else key="close" to="/">
             <img class="logo" src="../../assets/logo.png">
           </router-link>
         </transition>
@@ -18,7 +18,7 @@
       <el-scrollbar wrap-class="scrollbar-wrapper">
         <el-menu :default-active="this.$route.path" :collapse="!sidebarState" :background-color="globalCss.menuBgColor" :text-color="globalCss.menuTextColor"
           :collapse-transition="false" mode="vertical" :unique-opened="false">
-          <SideMenu v-for="route in routes" :key="route.path" :item="route" :basePath="route.path" :userRole="userRole"/>
+          <SideMenu v-for="route in routes" :key="route.path" :item="route" :basePath="route.path"/>
         </el-menu>
       </el-scrollbar>
     </div>
@@ -33,7 +33,10 @@
           <div class="local-list">
             <el-breadcrumb separator-class="el-icon-arrow-right" class="breadcrumb-cont">
               <transition-group name="local-list-chg">
-                <el-breadcrumb-item v-for="item in localList" :key="item.path" :to="item.path">{{ item.name}}</el-breadcrumb-item>
+                <el-breadcrumb-item v-for="(item,index) in localList" :key="item.path">
+                  <span v-if="item.redirect === 'noRedirect' || index == localList.length - 1" class="no-redirect">{{ item.meta.title }}</span>
+                  <a v-else @click.prevent="handleLink(item)">{{ item.meta.title }}</a>
+                </el-breadcrumb-item>
               </transition-group>
             </el-breadcrumb>
           </div>
@@ -86,10 +89,6 @@ export default {
     sidebarState () {
       return this.$store.state.app.sidebarState
     },
-    userRole () {
-      this.$store.dispatch('getUserRole')
-      return this.$store.state.user.userRole
-    },
     deviceType () {
       return this.$store.state.app.deviceType
     },
@@ -101,14 +100,15 @@ export default {
     }
   },
   watch: {
-    $router (route) {
-      this.getBreadcrumb()
+    '$route': 'routeChangeHandler'
+  },
+  methods: {
+    routeChangeHandler () {
       if (this.deviceType === 'mobile' && this.sidebarState) {
         this.$store.dispatch('closeSidebar')
       }
-    }
-  },
-  methods: {
+      this.getBreadcrumb()
+    },
     isMobile () {
       const curDocWidth = document.body.getBoundingClientRect().width - 1
       return curDocWidth < this.$store.state.app.mobileWidth
@@ -128,20 +128,27 @@ export default {
       this.$store.dispatch('toggleSideBar')
     },
     getBreadcrumb () {
-      debugger
-      let routeArr = this.$route.matched.filter(item => !item.hidden && item.name)
+      let routeArr = this.$route.matched.filter(item => item.meta && item.meta.title)
       let firstRoute = routeArr[0]
       if (!this.isHomeRoute(firstRoute)) {
-        firstRoute = [{ path: '/home', name: '首页' }].concat(firstRoute)
+        routeArr = [{ path: '/', meta: { title: '首页' } }].concat(routeArr)
       }
-      this.localList = firstRoute.filter(item => !item.hidden && item.name)
+      this.localList = routeArr.filter(item => item.meta && item.meta.title)
     },
     isHomeRoute (route) {
-      let routeName = ''
-      if (route && route.name) {
-        routeName = route.name
+      const routeName = route && route.name
+      if (!routeName) {
+        return false
       }
       return (routeName !== '' && routeName.trim() === '首页')
+    },
+    handleLink (item) {
+      const { redirect, path } = item
+      if (redirect) {
+        this.$router.push(redirect)
+        return
+      }
+      this.$router.push(path)
     }
   }
 }
@@ -227,9 +234,9 @@ export default {
             float: left;
             height: 49px;
             .icon-trans {
-              width: 21px;
-              height: 21px;
-              margin: 14px;
+              width: 17px;
+              height: 17px;
+              margin: 16px;
               cursor: pointer;
             }
             .actived {
@@ -238,10 +245,11 @@ export default {
           }
           .local-list {
             float: left;
+            height: 49px;
             .breadcrumb-cont {
               display: inline-block;
               font-size: 14px;
-              line-height: 50px;
+              line-height: 49px;
               .local-list-chg-enter-active, .local-list-chg-leave-active {
                 transition: all .5s;
               }
