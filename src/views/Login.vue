@@ -1,6 +1,5 @@
 <template>
-  <div>aaaaa<input type="file" /></div>
-  
+  <div>aaaaa</div>
 </template>
 
 <script>

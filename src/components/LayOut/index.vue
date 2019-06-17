@@ -16,8 +16,9 @@
       </div>
       <!-- 侧边单行栏 -->
       <el-scrollbar wrap-class="scrollbar-wrapper">
-        <el-menu :default-active="this.$route.path" :collapse="!sidebarState" :background-color="globalCss.menuBgColor" :text-color="globalCss.menuTextColor">
-          <SideMenu v-for="route in routes" :key="route.path" :item="route"/>
+        <el-menu :default-active="this.$route.path" :collapse="!sidebarState" :background-color="globalCss.menuBgColor" :text-color="globalCss.menuTextColor"
+          :collapse-transition="false" mode="vertical" :unique-opened="false">
+          <SideMenu v-for="route in routes" :key="route.path" :item="route" :basePath="route.path" :userRole="userRole"/>
         </el-menu>
       </el-scrollbar>
     </div>
@@ -29,13 +30,20 @@
           <div class="toggle-trans">
             <img src="../../assets/toleft.png" class="icon-trans" :class="{'actived': !sidebarState}" @click="transToggleClick">
           </div>
+          <div class="local-list">
+            <el-breadcrumb separator-class="el-icon-arrow-right" class="breadcrumb-cont">
+              <transition-group name="local-list-chg">
+                <el-breadcrumb-item v-for="item in localList" :key="item.path" :to="item.path">{{ item.name}}</el-breadcrumb-item>
+              </transition-group>
+            </el-breadcrumb>
+          </div>
         </div>
       </div>
       <!-- 单页面路由切换输出 -->
       <div class="main">
         <div class="cont">
           <transition name="cont-chg" mode="out-in">
-            <router-view/>
+            <router-view :key="this.$route.fullPath"/>
           </transition>
         </div>
       </div>
@@ -48,6 +56,14 @@ import globalCss from '../../styles/global.scss'
 import SideMenu from '../../components/SideMenu'
 
 export default {
+  data () {
+    return {
+      localList: null
+    }
+  },
+  created () {
+    this.getBreadcrumb()
+  },
   beforeMount () {
     window.addEventListener('resize', this.resizeHandler)
   },
@@ -65,11 +81,14 @@ export default {
   },
   computed: {
     title () {
-      console.log(this.$route.path)
       return this.$store.state.app.title
     },
     sidebarState () {
       return this.$store.state.app.sidebarState
+    },
+    userRole () {
+      this.$store.dispatch('getUserRole')
+      return this.$store.state.user.userRole
     },
     deviceType () {
       return this.$store.state.app.deviceType
@@ -83,6 +102,7 @@ export default {
   },
   watch: {
     $router (route) {
+      this.getBreadcrumb()
       if (this.deviceType === 'mobile' && this.sidebarState) {
         this.$store.dispatch('closeSidebar')
       }
@@ -106,6 +126,22 @@ export default {
     },
     transToggleClick () {
       this.$store.dispatch('toggleSideBar')
+    },
+    getBreadcrumb () {
+      debugger
+      let routeArr = this.$route.matched.filter(item => !item.hidden && item.name)
+      let firstRoute = routeArr[0]
+      if (!this.isHomeRoute(firstRoute)) {
+        firstRoute = [{ path: '/home', name: '首页' }].concat(firstRoute)
+      }
+      this.localList = firstRoute.filter(item => !item.hidden && item.name)
+    },
+    isHomeRoute (route) {
+      let routeName = ''
+      if (route && route.name) {
+        routeName = route.name
+      }
+      return (routeName !== '' && routeName.trim() === '首页')
     }
   }
 }
@@ -200,6 +236,31 @@ export default {
               transform: rotate(180deg);
             }
           }
+          .local-list {
+            float: left;
+            .breadcrumb-cont {
+              display: inline-block;
+              font-size: 14px;
+              line-height: 50px;
+              .local-list-chg-enter-active, .local-list-chg-leave-active {
+                transition: all .5s;
+              }
+              .local-list-chg-enter, .local-list-chg-leave-active {
+                opacity: 0;
+                transform: translateX(20px);
+              }
+              .local-list-chg-move {
+                transition: all .5s;
+              }
+              .local-list-chg-leave-active {
+                position: absolute;
+              }
+              .no-redirect {
+                color: #97a8be;
+                cursor: text;
+              }
+            }
+          }
         }
       }
       .main {
@@ -222,6 +283,9 @@ export default {
       }
       .el-scrollbar {
         height: calc(100% - 50px);
+      }
+      .el-submenu__title span, .el-submenu__title .el-submenu__icon-arrow {
+        display: none;
       }
     }
     .layout {

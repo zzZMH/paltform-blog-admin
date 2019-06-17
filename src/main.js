@@ -7,9 +7,12 @@ import 'element-ui/lib/theme-chalk/index.css'
 import locale from 'element-ui/lib/locale/lang/zh-CN'
 import installAPI from './api/index'
 import './styles/index.scss'
+import mavonEditor from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
 
 Vue.use(ElementUI, { locale })
 Vue.use(installAPI)
+Vue.use(mavonEditor)
 
 Vue.config.productionTip = false
 

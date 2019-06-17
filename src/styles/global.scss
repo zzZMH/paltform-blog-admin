@@ -3,9 +3,12 @@ $sideBarWidth: 210px;
 $menuTextColor:#bfcbd9;
 
 $menuBgColor:#304156;
+$menuHoverColor:#263445;
+$subMenuHoverColor:#001528;
 
 :export {
   menuBgColor: $menuBgColor;
   menuTextColor: $menuTextColor;
+  menuHoverColor: $menuHoverColor;
 }
 
