@@ -219,6 +219,7 @@ export default {
       min-height: 100%;
       margin-left: $sideBarWidth;
       transition: margin-left 0.3s;
+      transition: width 0.3s;
       .header {
         position: fixed;
         width: calc(100% - #{$sideBarWidth});
@@ -285,9 +286,10 @@ export default {
   }
   .sidebar-closed {
     .sidebar {
-      width: 65px !important;
+      width: $sideBarClosedWidth !important;
+      transition: width 0.3s;
       .logo-title {
-        width: 65px !important;
+        width: $sideBarClosedWidth !important;
       }
       .el-scrollbar {
         height: calc(100% - 50px);
@@ -297,10 +299,12 @@ export default {
       }
     }
     .layout {
-      width: calc(100% - 65px);
-      margin-left: 65px;
+      width: calc(100% - #{$sideBarClosedWidth});
+      margin-left: $sideBarClosedWidth;
+      transition: width 0.3s;
       .header {
-        width: calc(100% - 65px);
+        width: calc(100% - #{$sideBarClosedWidth});
+        transition: width 0.3s;
       }
     }
   }

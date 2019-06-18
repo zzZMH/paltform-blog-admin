@@ -25,44 +25,69 @@ const constRouters = [{
   hidden: true
 }, {
   path: '/',
-  component: Layout,
   redirect: '/home',
+  component: Layout,
   children: [{
     path: 'home',
     name: '首页',
-    component: () => import('../views/Home.vue'),
-    meta: { title: '首页', icon: 'el-icon-s-home', roles: ['user', 'visitor'] }
+    meta: { title: '首页', icon: 'el-icon-s-home', roles: ['user', 'visitor'] },
+    component: () => import('../views/Home.vue')
   }]
 }, {
-  path: '/about',
+  path: '/user',
+  redirect: '/user/userList',
+  name: '用户管理',
+  meta: { title: '用户管理', icon: 'el-icon-s-comment' },
   component: Layout,
-  redirect: '/about/introduce',
-  name: '关于',
-  meta: { title: '关于', icon: 'el-icon-s-comment' },
   children: [{
-    path: 'introduce',
-    name: '简介',
-    component: () => import('../views/About.vue'),
-    meta: { title: '简介', icon: 'el-icon-s-comment', roles: ['user'] }
+    path: 'userList',
+    name: '用户列表',
+    meta: { title: '用户列表', icon: 'el-icon-s-comment' },
+    component: () => import('../views/About.vue')
   }, {
-    path: 'login',
-    name: '登录',
-    component: () => import('../views/Login.vue'),
-    meta: { title: '登录', icon: 'el-icon-s-custom' }
+    path: 'createUser',
+    name: '添加用户',
+    meta: { title: '添加用户', icon: 'el-icon-s-custom' },
+    component: () => import('../views/Login.vue')
   }]
 }, {
-  path: '/a',
+  path: '/article',
+  redirect: '/article/articleList',
+  name: '文章管理',
+  meta: { title: '文章管理', icon: 'el-icon-s-comment', roles: ['user', 'visitor'] },
+  component: Layout,
   children: [{
-    path: 'a',
-    name: '文章管理',
-    meta: { title: '文章管理', icon: 'el-icon-s-home', roles: ['user', 'visitor'] }
+    path: 'articleList',
+    name: '文章列表',
+    meta: { title: '文章列表', icon: 'el-icon-s-home', roles: ['user', 'visitor'] },
+    component: () => import('../views/Login.vue')
+  }, {
+    path: 'carticleType',
+    name: '文章分类',
+    meta: { title: '文章分类', icon: 'el-icon-s-home', roles: ['user'] },
+    component: () => import('../views/Login.vue')
+  }, {
+    path: 'createArticle',
+    name: '添加文章',
+    meta: { title: '添加文章', icon: 'el-icon-s-home', roles: ['user'] },
+    component: () => import('../views/Login.vue')
   }]
 }, {
-  path: '/b',
+  path: '/audit',
+  component: Layout,
+  redirect: '/audit/auditList',
+  name: '审核管理',
+  meta: { title: '审核管理', icon: 'el-icon-s-comment' },
   children: [{
-    path: 'b',
-    name: '审核管理',
-    meta: { title: '审核管理', icon: 'el-icon-s-home', roles: ['user', 'visitor'] }
+    path: 'auditList',
+    name: '审核列表',
+    meta: { title: '审核列表', icon: 'el-icon-s-home' },
+    component: () => import('../views/Login.vue')
+  }, {
+    path: 'auditRecode',
+    name: '审核记录',
+    meta: { title: '审核记录', icon: 'el-icon-s-home' },
+    component: () => import('../views/Login.vue')
   }]
 }]
 

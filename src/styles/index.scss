@@ -76,3 +76,9 @@ a:hover {
     display: none;
   }
 }
+
+// 输入框前小图标大小及颜色全局修改
+.el-input__icon {
+  font-size: 17px;
+  color: #409eff;
+}
