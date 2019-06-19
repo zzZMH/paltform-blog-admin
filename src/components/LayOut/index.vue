@@ -10,7 +10,7 @@
             <h3 class="title">{{title}}</h3>
           </router-link>
           <router-link v-else key="close" to="/">
-            <img class="logo" src="../../assets/logo.png">
+            <img class="logo" src="../../assets/yuedu.png">
           </router-link>
         </transition>
       </div>
@@ -157,155 +157,165 @@ export default {
 <style lang="scss" scoped>
 @import "../../styles/global.scss";
 
-#app {
+.app-wrap {
+  position: relative;
   height: 100%;
-  .app-wrap {
-    position: relative;
-    height: 100%;
+  width: 100%;
+  &::after {
+    content: "";
+    clear: both;
+  }
+  .wrap-bg {
+    position: absolute;
     width: 100%;
-    &::after {
-      content: "";
-      clear: both;
-    }
-    .wrap-bg {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      opacity: 0.5;
-      background-color: #000;
-      z-index: 999;
-    }
-    .sidebar {
-      position: fixed;
-      width: $sideBarWidth !important;
-      height: 100%;
-      transition: width 0.3s;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      background-color: $menuBgColor;
-      z-index: 1000;
-      overflow: hidden;
-      .logo-title {
-        position: relative;
-        width: $sideBarWidth !important;
-        height: 50px;
-        text-align: center;
-        background-color: #2b2f3a;
-        transition: width 0.3s;
-        .logo-title-chg-enter-active {
-          transition: opacity 1s;
-        }
-        .logo-title-chg-enter, .logo-title-chg-leave-to {
-          opacity: 0;
-        }
-        .title {
-          display: inline-block;
-          color: #fff;
-          font-size: 16px;
-        }
-        .logo {
-          width: 50px;
-          height: 50px;
-        }
-      }
-      .el-scrollbar {
-        height: calc(100% - 50px);
-      }
-    }
-    .layout {
+    height: 100%;
+    top: 0;
+    opacity: 0.5;
+    background-color: #000;
+    z-index: 999;
+  }
+  .sidebar {
+    position: fixed;
+    width: $sideBarWidth !important;
+    height: 100%;
+    transition: width 0.3s;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    background-color: $menuBgColor;
+    z-index: 1000;
+    overflow: hidden;
+    .logo-title {
       position: relative;
-      min-height: 100%;
-      margin-left: $sideBarWidth;
-      transition: margin-left 0.3s;
+      width: $sideBarWidth !important;
+      height: 50px;
+      text-align: center;
+      background-color: #2b2f3a;
       transition: width 0.3s;
-      .header {
-        position: fixed;
-        width: calc(100% - #{$sideBarWidth});
-        top: 0;
-        right: 0;
-        border-bottom: 1px solid #e6e6e6;
-        transition: width 0.3s;
-        z-index: 99;
-        .navbar {
+      .logo-title-chg-enter-active {
+        transition: opacity 1s;
+      }
+      .logo-title-chg-enter, .logo-title-chg-leave-to {
+        opacity: 0;
+      }
+      .title {
+        display: inline-block;
+        color: #fff;
+        font-size: 16px;
+      }
+      .logo {
+        width: 40px;
+        height: 30px;
+        margin-top: 10px;
+        margin-left: -5px;
+      }
+    }
+    .el-scrollbar {
+      height: calc(100% - 50px);
+    }
+  }
+  .layout {
+    position: relative;
+    min-height: 100%;
+    margin-left: $sideBarWidth;
+    transition: margin-left 0.3s;
+    .header {
+      position: fixed;
+      width: calc(100% - #{$sideBarWidth});
+      top: 0;
+      right: 0;
+      border-bottom: 1px solid #e6e6e6;
+      transition: width 0.3s;
+      z-index: 99;
+      .navbar {
+        height: 49px;
+        background-color: #fff;
+        .toggle-trans {
+          float: left;
           height: 49px;
-          background-color: #fff;
-          .toggle-trans {
-            float: left;
-            height: 49px;
-            .icon-trans {
-              width: 17px;
-              height: 17px;
-              margin: 16px;
-              cursor: pointer;
-            }
-            .actived {
-              transform: rotate(180deg);
-            }
+          .icon-trans {
+            width: 17px;
+            height: 17px;
+            margin: 16px;
+            cursor: pointer;
           }
-          .local-list {
-            float: left;
-            height: 49px;
-            .breadcrumb-cont {
-              display: inline-block;
-              font-size: 14px;
-              line-height: 49px;
-              .local-list-chg-enter-active, .local-list-chg-leave-active {
-                transition: all .5s;
-              }
-              .local-list-chg-enter, .local-list-chg-leave-active {
-                opacity: 0;
-                transform: translateX(20px);
-              }
-              .local-list-chg-move {
-                transition: all .5s;
-              }
-              .local-list-chg-leave-active {
-                position: absolute;
-              }
-              .no-redirect {
-                color: #97a8be;
-                cursor: text;
-              }
+          .actived {
+            transform: rotate(180deg);
+          }
+        }
+        .local-list {
+          float: left;
+          height: 49px;
+          .breadcrumb-cont {
+            display: inline-block;
+            font-size: 14px;
+            line-height: 49px;
+            .local-list-chg-enter-active, .local-list-chg-leave-active {
+              transition: all .5s;
+            }
+            .local-list-chg-enter, .local-list-chg-leave-active {
+              opacity: 0;
+              transform: translateX(20px);
+            }
+            .local-list-chg-move {
+              transition: all .5s;
+            }
+            .local-list-chg-leave-active {
+              position: absolute;
+            }
+            .no-redirect {
+              color: #97a8be;
+              cursor: text;
             }
           }
         }
       }
-      .main {
-        width: 100%;
-        min-height: calc(100% - 50px);
-        position: relative;
-        padding-top: 50px;
-        overflow: hidden;
-        .cont {
-          padding: 20px;
+    }
+    .main {
+      width: 100%;
+      min-height: calc(100% - 50px);
+      position: relative;
+      padding-top: 50px;
+      overflow: hidden;
+      .cont {
+        padding: 20px;
+        .cont-chg-leave-active, .cont-chg-enter-active {
+          transition: all .5s;
+        }
+        .cont-chg-enter {
+          opacity: 0;
+          transform: translateX(-30px);
+        }
+        .cont-chg-leave-to {
+          opacity: 0;
+          transform: translateX(30px);
         }
       }
     }
   }
-  .sidebar-closed {
-    .sidebar {
+}
+.sidebar-closed {
+  .sidebar {
+    width: $sideBarClosedWidth !important;
+    transition: width 0.3s;
+    .logo-title {
       width: $sideBarClosedWidth !important;
-      transition: width 0.3s;
-      .logo-title {
-        width: $sideBarClosedWidth !important;
-      }
-      .el-scrollbar {
-        height: calc(100% - 50px);
-      }
-      .el-submenu__title span, .el-submenu__title .el-submenu__icon-arrow {
-        display: none;
-      }
     }
-    .layout {
+    .el-scrollbar {
+      height: calc(100% - 50px);
+    }
+    .el-submenu__title span, .el-submenu__title .el-submenu__icon-arrow {
+      display: none;
+    }
+  }
+  .layout {
+    width: calc(100% - #{$sideBarClosedWidth});
+    margin-left: $sideBarClosedWidth;
+    .header {
       width: calc(100% - #{$sideBarClosedWidth});
-      margin-left: $sideBarClosedWidth;
+    }
+    .main {
       transition: width 0.3s;
-      .header {
-        width: calc(100% - #{$sideBarClosedWidth});
-        transition: width 0.3s;
-      }
     }
   }
 }

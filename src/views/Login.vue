@@ -4,61 +4,156 @@
       <div class="signinForm">
         <div class="formLogo"></div>
         <h2>blog-admin-platform</h2>
-        <!-- <el-form :model="loginForm" :rules="loginFormRules"> -->
-        <!-- <el-form-item prop="userName"> -->
-          <el-input placeholder="请输入用户名" v-model="loginForm.userName" prefix-icon="el-icon-user" type="text"></el-input>
-        <!-- </el-form-item> -->
-        <!-- <el-form-item prop="userName"> -->
-          <el-input placeholder="请输入密码" v-model="loginForm.password" prefix-icon="el-icon-lock" type="password"></el-input>
-        <!-- </el-form-item> -->
-        <el-input v-show="isSignin" placeholder="请重复密码" v-model="loginForm.repeatwpwd" prefix-icon="el-icon-lock" type="password"></el-input>
-        <el-button v-show="!isSignin" type="primary" @click="doSignIn">登 录</el-button>
-        <el-link v-show="!isSignin" :underline="false"><span @click="toSignUp">还没账号吗？</span></el-link>
-        <el-button v-show="isSignin" @click="doSignUp">注 册</el-button>
-        <el-link v-show="isSignin" :underline="false"><span @click="toSignIn">返回登录</span></el-link>
-        <!-- </el-form> -->
+        <!-- 登录 -->
+        <el-form :model="loginForm" :rules="loginFormRules" v-if="!isSignin" key="loginForm" ref="loginForm">
+          <el-form-item prop="userName">
+            <el-input ref="userNameIn" placeholder="请输入用户名" name="userName" v-model="loginForm.userName" prefix-icon="el-icon-user" type="text"></el-input>
+          </el-form-item>
+          <el-form-item prop="password">
+            <el-input ref="passwordIn" placeholder="请输入密码" name="password" v-model="loginForm.password" prefix-icon="el-icon-lock" type="password"></el-input>
+          </el-form-item>
+          <el-form-item key="rpBlock"></el-form-item>
+          <el-button type="primary" @click.prevent="doSignIn" :loading="loadingLogin">登 录</el-button>
+          <el-link><span @click.prevent="toSignUp">还没账号吗？</span></el-link>
+        </el-form>
+        <!-- 注册 -->
+        <el-form :model="signupForm" :rules="signupFormRules" v-else key="signupForm" ref="signupForm">
+          <el-form-item prop="userName">
+            <el-input ref="userNameUp" placeholder="请输入用户名" name="userName" v-model="signupForm.userName" prefix-icon="el-icon-user" type="text"></el-input>
+          </el-form-item>
+          <el-form-item prop="password">
+            <el-input ref="passwordUp" placeholder="请输入密码" name="password" v-model="signupForm.password" prefix-icon="el-icon-lock" type="password"></el-input>
+          </el-form-item>
+          <el-form-item prop="repeatpwd">
+            <el-input ref="repeatpwd" placeholder="请确认密码" name="repeatpwd" v-model="signupForm.repeatpwd" prefix-icon="el-icon-key" type="password"></el-input>
+          </el-form-item>
+          <el-button type="primary" @click.prevent="doSignUp" :loading="loadingSignup">注 册</el-button>
+          <el-link><span @click.prevent="toSignIn">快去登录吧！</span></el-link>
+        </el-form>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { validateUserName, validatePassword, validateRepeatPwd } from '../utils/validate'
 export default {
   name: 'login',
   data () {
-    return { 
+    const vldName = (rule, value, callback) => {
+      if (!validateUserName(value).flag) {
+        callback(new Error(validateUserName(value).msg))
+      } else {
+        callback()
+      }
+    }
+    const vldPwd = (rule, value, callback) => {
+      if (!validatePassword(value).flag) {
+        callback(new Error(validatePassword(value).msg))
+      } else {
+        callback()
+      }
+    }
+    const vldRptPwd = (rule, value, callback) => {
+      if (!validateRepeatPwd(value, this.signupForm.password).flag) {
+        callback(new Error(validateRepeatPwd(value, this.signupForm.password).msg))
+      } else {
+        callback()
+      }
+    }
+    return {
       isSignin: false,
+      loadingLogin: false,
+      loadingSignup: false,
       loginForm: {
         userName: '',
+        password: ''
+      },
+      signupForm: {
+        userName: '',
         password: '',
-        repeatwpwd: ''
+        repeatpwd: ''
       },
       loginFormRules: {
         userName: [{
           trigger: 'blur',
-          validator (rule, value, callback) {
-            if (value === '') {
-              callback(new Error('请输入用户名AAA'))
-            } else {
-              callback()
-            }
-          }
+          validator: vldName
+        }],
+        password: [{
+          trigger: 'blur',
+          validator: vldPwd
+        }]
+      },
+      signupFormRules: {
+        userName: [{
+          trigger: 'blur',
+          validator: vldName
+        }],
+        password: [{
+          trigger: 'blur',
+          validator: vldPwd
+        }],
+        repeatpwd: [{
+          trigger: 'blur',
+          validator: vldRptPwd
         }]
       }
     }
   },
   methods: {
+    resetLoginForm () {
+      this.loginForm.userName = ''
+      this.loginForm.password = ''
+    },
+    resetSignupForm () {
+      this.signupForm.userName = ''
+      this.signupForm.password = ''
+      this.signupForm.repeatpwd = ''
+    },
     toSignIn () {
       this.isSignin = false
+      this.resetSignupForm()
     },
     toSignUp () {
       this.isSignin = true
+      this.resetLoginForm()
     },
     doSignIn () {
-      console.log(this.userName)
+      const validFunc = (valid) => {
+        if (valid) {
+          if (this.loginForm.userName === 'zmh' && this.loginForm.password === '00000000') {
+            this.$message({
+              type: 'success',
+              message: '登录成功！'
+            })
+            this.loadingLogin = false
+            this.$router.push({ path: '/' })
+          } else {
+            this.$message.error('登录失败')
+            this.loadingLogin = false
+          }
+        } else {
+          this.loadingLogin = false
+        }
+      }
+      this.loadingLogin = true
+      this.$refs.loginForm.validate(validFunc)
     },
     doSignUp () {
-      console.log(this.repeatwpwd)
+      const validFunc = (valid) => {
+        if (valid) {
+          this.$message({
+            type: 'success',
+            message: '注册成功！'
+          })
+          this.loadingSignup = false
+          this.toSignIn()
+        } else {
+          this.loadingSignup = false
+        }
+      }
+      this.loadingSignup = true
+      this.$refs.signupForm.validate(validFunc)
     }
   }
 }
@@ -109,11 +204,19 @@ export default {
         float: left;
         width: 100%;
       }
-      .el-input, .el-button {
-        margin: 0 25px 20px 25px;
-        width: calc(100% - 50px);
+      .el-form {
+        padding: 0 25px;
+      }
+      .el-button {
+        margin: 0 0 10px 0;
+        width: 100%;
+        font-size: 15px;
       }
       .el-link {
+        color: #C0C4CC;
+        font-size: 12px;
+      }
+      .el-link:hover {
         color: #409eff;
         font-size: 12px;
       }
