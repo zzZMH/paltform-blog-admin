@@ -7,10 +7,10 @@
         <!-- 登录 -->
         <el-form :model="loginForm" :rules="loginFormRules" v-if="!isSignin" key="loginForm" ref="loginForm">
           <el-form-item prop="userName">
-            <el-input ref="userNameIn" placeholder="请输入用户名" name="userName" v-model="loginForm.userName" prefix-icon="el-icon-user" type="text"></el-input>
+            <el-input ref="userNameIn" placeholder="请输入用户名" name="userName" v-model="loginForm.userName" prefix-icon="el-icon-user" type="text" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item prop="password">
-            <el-input ref="passwordIn" placeholder="请输入密码" name="password" v-model="loginForm.password" prefix-icon="el-icon-lock" type="password"></el-input>
+            <el-input ref="passwordIn" placeholder="请输入密码" name="password" v-model="loginForm.password" prefix-icon="el-icon-lock" type="password" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item key="rpBlock"></el-form-item>
           <el-button type="primary" @click.prevent="doSignIn" :loading="loadingLogin">登 录</el-button>
@@ -19,13 +19,13 @@
         <!-- 注册 -->
         <el-form :model="signupForm" :rules="signupFormRules" v-else key="signupForm" ref="signupForm">
           <el-form-item prop="userName">
-            <el-input ref="userNameUp" placeholder="请输入用户名" name="userName" v-model="signupForm.userName" prefix-icon="el-icon-user" type="text"></el-input>
+            <el-input ref="userNameUp" placeholder="请输入用户名" name="userName" v-model="signupForm.userName" prefix-icon="el-icon-user" type="text" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item prop="password">
-            <el-input ref="passwordUp" placeholder="请输入密码" name="password" v-model="signupForm.password" prefix-icon="el-icon-lock" type="password"></el-input>
+            <el-input ref="passwordUp" placeholder="请输入密码" name="password" v-model="signupForm.password" prefix-icon="el-icon-lock" type="password" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item prop="repeatpwd">
-            <el-input ref="repeatpwd" placeholder="请确认密码" name="repeatpwd" v-model="signupForm.repeatpwd" prefix-icon="el-icon-key" type="password"></el-input>
+            <el-input ref="repeatpwd" placeholder="请确认密码" name="repeatpwd" v-model="signupForm.repeatpwd" prefix-icon="el-icon-key" type="password" autocomplete="off"></el-input>
           </el-form-item>
           <el-button type="primary" @click.prevent="doSignUp" :loading="loadingSignup">注 册</el-button>
           <el-link><span @click.prevent="toSignIn">快去登录吧！</span></el-link>
@@ -47,9 +47,16 @@ export default {
         callback()
       }
     }
-    const vldPwd = (rule, value, callback) => {
-      if (!validatePassword(value).flag) {
-        callback(new Error(validatePassword(value).msg))
+    const vldSigninPwd = (rule, value, callback) => {
+      if (!validatePassword(value, false).flag) {
+        callback(new Error(validatePassword(value, false).msg))
+      } else {
+        callback()
+      }
+    }
+    const vldSignupPwd = (rule, value, callback) => {
+      if (!validatePassword(value, true).flag) {
+        callback(new Error(validatePassword(value, true).msg))
       } else {
         callback()
       }
@@ -81,7 +88,7 @@ export default {
         }],
         password: [{
           trigger: 'blur',
-          validator: vldPwd
+          validator: vldSigninPwd
         }]
       },
       signupFormRules: {
@@ -91,7 +98,7 @@ export default {
         }],
         password: [{
           trigger: 'blur',
-          validator: vldPwd
+          validator: vldSignupPwd
         }],
         repeatpwd: [{
           trigger: 'blur',

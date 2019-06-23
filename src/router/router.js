@@ -43,7 +43,7 @@ const constRouters = [{
     path: 'userList',
     name: '用户列表',
     meta: { title: '用户列表', icon: 'el-icon-s-comment' },
-    component: () => import('../views/About.vue')
+    component: () => import('../views/User/UserList.vue')
   }, {
     path: 'createUser',
     name: '添加用户',

@@ -64,9 +64,25 @@ a:hover {
   margin-right: 10px !important;
 }
 
-// .el-menu-item span, .el-submenu span {
-//   font-size: 15px !important;
-// }
+.el-menu--inline {
+  .nest-menu .el-menu-item {
+    background-color: $subMenuBgColor !important;
+  }
+
+  .nest-menu .el-menu-item:hover {
+    background-color: $subMenuHoverColor !important;
+  }
+}
+
+.el-menu--vertical {
+  .nest-menu .el-menu-item {
+    background-color: $menuBgColor !important;
+  }
+
+  .nest-menu .el-menu-item:hover {
+    background-color: $menuHoverColor !important;
+  }
+}
 
 .nest-menu .el-menu-item i {
   font-size: 17px !important;
@@ -75,6 +91,8 @@ a:hover {
 .nest-menu .el-menu-item span {
   font-size: 12px !important;
 }
+
+
 
 // 导航栏关闭时隐藏标题
 .sidebar-closed {

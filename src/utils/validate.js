@@ -9,14 +9,14 @@ export function validateUserName (userName) {
   return { flag, msg }
 }
 
-export function validatePassword (password) {
+export function validatePassword (password, isSignup) {
   let flag = true
   let msg = ''
   password = password.trim()
   if (password === '') {
     flag = false
     msg = '请输入密码'
-  } else if (password.length < 8) {
+  } else if (isSignup && password.length < 8) {
     flag = false
     msg = '请输入至少8位密码'
   }

@@ -4,12 +4,15 @@ $sideBarClosedWidth: 65px;
 $menuTextColor:#bfcbd9;
 
 $menuBgColor:#304156;
+$subMenuBgColor:#1f2d3d;
 $menuHoverColor:#263445;
 $subMenuHoverColor:#001528;
 
 :export {
   menuBgColor: $menuBgColor;
-  menuTextColor: $menuTextColor;
+  subMenuBgColor: $subMenuBgColor;
   menuHoverColor: $menuHoverColor;
+  subMenuHoverColor: $subMenuHoverColor;
+  menuTextColor: $menuTextColor;
 }
 
