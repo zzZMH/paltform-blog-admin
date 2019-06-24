@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import nprogress from 'nprogress'
 import 'nprogress/nprogress.css'
 import Layout from '../components/LayOut/index'
+import { validateIsLogin } from '../utils/validate'
 
 Vue.use(Router)
 
@@ -10,6 +11,8 @@ Vue.use(Router)
 nprogress.configure({
   showSpinner: false
 })
+
+const whiteList = ['/login']
 
 const constRouters = [{
   path: '*',
@@ -99,7 +102,21 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   nprogress.start()
-  next()
+  if (validateIsLogin()) {
+    if (to.path === '/login') {
+      next({ path: '/' })
+      nprogress.done()
+    } else {
+      next()
+    }
+  } else {
+    if (whiteList.indexOf(to.path) < 0) {
+      next(`/login?redirect=${to.path}`)
+      nprogress.done()
+    } else {
+      next()
+    }
+  }
 })
 
 router.afterEach(() => {

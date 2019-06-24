@@ -1,18 +1,34 @@
 import Cookies from 'js-cookie'
 
 const state = {
-  userRole: 'admin'
+  token: Cookies.get('userToken'),
+  userName: '',
+  userRole: 'visitor'
 }
 
 const mutations = {
-  GET_USERROLE (state) {
-    state.userRole = Cookies.get('userRole') ? Cookies.get('userRole') : 'admin'
+  SET_USERTOKEN (state, userToken) {
+    state.token = userToken
+    Cookies.set('userToken', userToken)
+  },
+  REMOVE_USERTOKEN (state) {
+    state.token = ''
+    Cookies.remove('userToken')
+  },
+  SET_USERNAME (state, userName) {
+    state.userName = userName
   }
 }
 
 const actions = {
-  getUserRole ({ commit }) {
-    commit('GET_USERROLE')
+  setUserToken ({ commit }, userToken) {
+    commit('SET_USERTOKEN', userToken)
+  },
+  removeUserToken ({ commit }) {
+    commit('REMOVE_USERTOKEN')
+  },
+  setUserName ({ commit }, userName) {
+    commit('SET_USERNAME', userName)
   }
 }
 

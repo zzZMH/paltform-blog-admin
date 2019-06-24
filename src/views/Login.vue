@@ -69,6 +69,7 @@ export default {
       }
     }
     return {
+      redirect: undefined,
       isSignin: false,
       loadingLogin: false,
       loadingSignup: false,
@@ -107,6 +108,14 @@ export default {
       }
     }
   },
+  watch: {
+    $route: {
+      handler (route) {
+        this.redirect = route.query && route.query.redirect
+      },
+      immediate: true
+    }
+  },
   methods: {
     resetLoginForm () {
       this.loginForm.userName = ''
@@ -133,8 +142,10 @@ export default {
               type: 'success',
               message: '登录成功！'
             })
+            this.$store.dispatch('setUserToken', this.loginForm.userName + '#' + this.loginForm.password)
+            this.$store.dispatch('setUserName', this.loginForm.userName)
             this.loadingLogin = false
-            this.$router.push({ path: '/' })
+            this.$router.push({ path: this.redirect || '/' })
           } else {
             this.$message.error('登录失败')
             this.loadingLogin = false

@@ -1,3 +1,5 @@
+import Cookies from 'js-cookie'
+
 export function validateUserName (userName) {
   let flag = true
   let msg = ''
@@ -35,4 +37,8 @@ export function validateRepeatPwd (repeatPwd, password) {
     msg = '两次密码输入不一致'
   }
   return { flag, msg }
+}
+
+export function validateIsLogin () {
+  return Cookies.get('userToken')
 }
