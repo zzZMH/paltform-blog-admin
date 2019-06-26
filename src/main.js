@@ -5,10 +5,11 @@ import store from './store/store'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import locale from 'element-ui/lib/locale/lang/zh-CN'
-import installAPI from './api/index'
+import installAPI from './api/base/index'
 import './styles/index.scss'
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
+require('./mock/index.js')
 
 Vue.use(ElementUI, { locale })
 Vue.use(installAPI)

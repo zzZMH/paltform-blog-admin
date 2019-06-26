@@ -6,7 +6,7 @@ const get = (url) => {
     service.get(url).then((res) => {
       resolve(res.data)
     }).catch((err) => {
-      reject(err.data)
+      reject(err)
     })
   })
 }
@@ -16,7 +16,7 @@ const post = (url, params) => {
     service.post(url, qs.stringify(params)).then((res) => {
       resolve(res.data)
     }).catch((err) => {
-      reject(err.data)
+      reject(err)
     })
   })
 }

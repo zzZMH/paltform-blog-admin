@@ -4,12 +4,12 @@
       <el-form :model="userSearchForm" ref="userSearchForm" label-width="40%" size="small">
         <el-row>
           <el-col :span="6">
-            <el-form-item label="用户登录名：">
+            <el-form-item label="登录名：">
               <el-input v-model="userSearchForm.mimian"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="用户姓名：">
+            <el-form-item label="用户名：">
               <el-input v-model="userSearchForm.mimian"></el-input>
             </el-form-item>
           </el-col>
@@ -19,17 +19,20 @@
             </el-form-item>
           </el-col>
           <el-col :span="6" style="text-align: center;">
-            <el-button size="small">清空</el-button>
-            <el-button size="small" type="primary">查询</el-button>
+            <el-button size="small" @click="resetUserSearchForm">清空</el-button>
+            <el-button size="small" type="primary" @click="searchUserList">查询</el-button>
           </el-col>
         </el-row>
       </el-form>
     </el-card>
     <br>
     <el-table :data="tableData" border>
-      <el-table-column prop="date" label="日期" min-width="5%" header-align="center"></el-table-column>
-      <el-table-column prop="name" label="姓名" min-width="10%" header-align="center"></el-table-column>
-      <el-table-column prop="address" label="地址" min-width="5%" header-align="center"></el-table-column>
+      <el-table-column prop="userId" label="ID" min-width="28%" header-align="center"></el-table-column>
+      <el-table-column prop="loginName" label="登录名" min-width="20%" header-align="center"></el-table-column>
+      <el-table-column prop="userName" label="用户名" min-width="20%" header-align="center"></el-table-column>
+      <el-table-column prop="lastLoginTime" label="最近登录时间" min-width="20%" header-align="center" align="center"></el-table-column>
+      <el-table-column prop="userState" label="用户状态" min-width="7%" header-align="center" align="center"></el-table-column>
+      <el-table-column prop="userOperate" label="操作" min-width="5%" header-align="center" align="center"></el-table-column>
     </el-table>
     <br>
     <el-row>
@@ -41,37 +44,30 @@
 </template>
 
 <script>
+import { getUserList } from '../../api/index'
+
 export default {
   data () {
     return {
       userSearchForm: {
         mimian: ''
       },
-      tableData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄'
-      }]
+      tableData: []
+    }
+  },
+  created () {
+    this.$get(getUserList).then(res => {
+      if (res && res.code === '2000') {
+        this.tableData = res.data
+      }
+    })
+  },
+  methods: {
+    resetUserSearchForm () {
+      this.userSearchForm.mimian = ''
+    },
+    searchUserList () {
+      console.log(this.$refs['userSearchForm'])
     }
   }
 }
